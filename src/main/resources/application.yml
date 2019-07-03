@@ -1,55 +1,78 @@
-#server:
-#  servlet:
-#    context-path: /
-#  port: 8080
+
+server:
+  servlet:
+    context-path: /
+  port: 8080
 
 spring:
-#  application:
-#    name: spring-boot-kafka
+    application:
+      name: kafka-demo
 
-# kafka
+  # æ•°æ®åº“
+
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql://47.111.175.146:3306/test_db?useUnicode=true&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&characterEncoding=UTF-8
+    driver-class-name: com.mysql.jdbc.Driver
+    username: root
+    password: Zhu123456*
+  # kafka
   kafka:
-    # Ö¸¶¨ kafka µØÖ·¿ÉÒÔ¶à¸ö
+    # æŒ‡å®š kafka åœ°å€å¯ä»¥å¤šä¸ª
     bootstrap-servers:
-      - 192.168.100.249:9092
-      - 192.168.100.249:9093
-      - 192.168.100.249:9094
-    # Ö¸¶¨listener ÈİÆ÷ÖĞµÄÏß³ÌÊı£¬ÓÃÓÚÌá¸ß²¢·¢Á¿
+      - 47.111.175.146:9092
+#      - 192.168.100.249:9093
+#      - 192.168.100.249:9094
+    # æŒ‡å®šlistener å®¹å™¨ä¸­çš„çº¿ç¨‹æ•°ï¼Œç”¨äºæé«˜å¹¶å‘é‡
     listener:
-      concurrency: 3
+      batch-listener: true  # æ˜¯å¦å¼€å¯æ‰¹é‡æ¶ˆè´¹ï¼Œtrueè¡¨ç¤ºæ‰¹é‡æ¶ˆè´¹
+      concurrencys: 3,6     # è®¾ç½®æ¶ˆè´¹çš„çº¿ç¨‹æ•°
+      poll-timeout: 1500    # åªé™è‡ªåŠ¨æäº¤
 
-    # Éú²úÕßµÄÅäÖÃ£¬´ó²¿·ÖÎÒÃÇ¿ÉÒÔÊ¹ÓÃÄ¬ÈÏµÄ£¬ÕâÀïÁĞ³ö¼¸¸ö±È½ÏÖØÒªµÄÊôĞÔ
+    # ç”Ÿäº§è€…çš„é…ç½®ï¼Œå¤§éƒ¨åˆ†æˆ‘ä»¬å¯ä»¥ä½¿ç”¨é»˜è®¤çš„ï¼Œè¿™é‡Œåˆ—å‡ºå‡ ä¸ªæ¯”è¾ƒé‡è¦çš„å±æ€§
     producer:
-    # Ã¿´ÎÅúÁ¿·¢ËÍÏûÏ¢µÄÊıÁ¿
+      # æ¯æ¬¡æ‰¹é‡å‘é€æ¶ˆæ¯çš„æ•°é‡
       batch-size: 1000
-      # ÉèÖÃ´óÓÚ0µÄÖµ½«Ê¹¿Í»§¶ËÖØĞÂ·¢ËÍÈÎºÎÊı¾İ£¬Ò»µ©ÕâĞ©Êı¾İ·¢ËÍÊ§°Ü¡£×¢Òâ£¬ÕâĞ©ÖØÊÔÓë¿Í»§¶Ë½ÓÊÕµ½·¢ËÍ´íÎóÊ±µÄÖØÊÔÃ»ÓĞÊ²Ã´²»Í¬¡£ÔÊĞíÖØÊÔ½«Ç±ÔÚµÄ¸Ä±äÊı¾İµÄË³Ğò£¬Èç¹ûÕâÁ½¸öÏûÏ¢¼ÇÂ¼¶¼ÊÇ·¢ËÍµ½Í¬Ò»¸öpartition£¬ÔòµÚÒ»¸öÏûÏ¢Ê§°ÜµÚ¶ş¸ö·¢ËÍ³É¹¦£¬ÔòµÚ¶şÌõÏûÏ¢»á±ÈµÚÒ»ÌõÏûÏ¢³öÏÖÒªÔç¡£
-      retries: 0
-      # producer¿ÉÒÔÓÃÀ´»º´æÊı¾İµÄÄÚ´æ´óĞ¡¡£Èç¹ûÊı¾İ²úÉúËÙ¶È´óÓÚÏòbroker·¢ËÍµÄËÙ¶È£¬producer»á×èÈû»òÕßÅ×³öÒì³££¬ÒÔ¡°block.on.buffer.full¡±À´±íÃ÷¡£ÕâÏîÉèÖÃ½«ºÍproducerÄÜ¹»Ê¹ÓÃµÄ×ÜÄÚ´æÏà¹Ø£¬µ«²¢²»ÊÇÒ»¸öÓ²ĞÔµÄÏŞÖÆ£¬ÒòÎª²»ÊÇproducerÊ¹ÓÃµÄËùÓĞÄÚ´æ¶¼ÊÇÓÃÓÚ»º´æ¡£Ò»Ğ©¶îÍâµÄÄÚ´æ»áÓÃÓÚÑ¹Ëõ£¨Èç¹ûÒıÈëÑ¹Ëõ»úÖÆ£©£¬Í¬Ñù»¹ÓĞÒ»Ğ©ÓÃÓÚÎ¬»¤ÇëÇó¡£
+      # è®¾ç½®å¤§äº0çš„å€¼å°†ä½¿å®¢æˆ·ç«¯é‡æ–°å‘é€ä»»ä½•æ•°æ®ï¼Œä¸€æ—¦è¿™äº›æ•°æ®å‘é€å¤±è´¥ã€‚æ³¨æ„ï¼Œè¿™äº›é‡è¯•ä¸å®¢æˆ·ç«¯æ¥æ”¶åˆ°å‘é€é”™è¯¯æ—¶çš„é‡è¯•æ²¡æœ‰ä»€ä¹ˆä¸åŒã€‚å…è®¸é‡è¯•å°†æ½œåœ¨çš„æ”¹å˜æ•°æ®çš„é¡ºåºï¼Œå¦‚æœè¿™ä¸¤ä¸ªæ¶ˆæ¯è®°å½•éƒ½æ˜¯å‘é€åˆ°åŒä¸€ä¸ªpartitionï¼Œåˆ™ç¬¬ä¸€ä¸ªæ¶ˆæ¯å¤±è´¥ç¬¬äºŒä¸ªå‘é€æˆåŠŸï¼Œåˆ™ç¬¬äºŒæ¡æ¶ˆæ¯ä¼šæ¯”ç¬¬ä¸€æ¡æ¶ˆæ¯å‡ºç°è¦æ—©ã€‚
+      retries: 1
+      # producerå¯ä»¥ç”¨æ¥ç¼“å­˜æ•°æ®çš„å†…å­˜å¤§å°ã€‚å¦‚æœæ•°æ®äº§ç”Ÿé€Ÿåº¦å¤§äºå‘brokerå‘é€çš„é€Ÿåº¦ï¼Œproducerä¼šé˜»å¡æˆ–è€…æŠ›å‡ºå¼‚å¸¸ï¼Œä»¥â€œblock.on.buffer.fullâ€æ¥è¡¨æ˜ã€‚è¿™é¡¹è®¾ç½®å°†å’Œproducerèƒ½å¤Ÿä½¿ç”¨çš„æ€»å†…å­˜ç›¸å…³ï¼Œä½†å¹¶ä¸æ˜¯ä¸€ä¸ªç¡¬æ€§çš„é™åˆ¶ï¼Œå› ä¸ºä¸æ˜¯producerä½¿ç”¨çš„æ‰€æœ‰å†…å­˜éƒ½æ˜¯ç”¨äºç¼“å­˜ã€‚ä¸€äº›é¢å¤–çš„å†…å­˜ä¼šç”¨äºå‹ç¼©ï¼ˆå¦‚æœå¼•å…¥å‹ç¼©æœºåˆ¶ï¼‰ï¼ŒåŒæ ·è¿˜æœ‰ä¸€äº›ç”¨äºç»´æŠ¤è¯·æ±‚ã€‚
       buffer-memory: 33554432
-      # key,valueĞòÁĞ»¯·½Ê½
+      linger: 1
+      # key,valueåºåˆ—åŒ–æ–¹å¼
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
 
-    # Ïû·ÑÕßµÄÅäÖÃ
+    # æ¶ˆè´¹è€…çš„é…ç½®
     consumer:
-      # Ö¸¶¨Ä¬ÈÏÏû·ÑÕßgroup id
+      # æŒ‡å®šé»˜è®¤æ¶ˆè´¹è€…group id
       group-id: test-group
-      # KafkaÖĞÃ»ÓĞ³õÊ¼Æ«ÒÆ»òÈç¹ûµ±Ç°Æ«ÒÆÔÚ·şÎñÆ÷ÉÏ²»ÔÙ´æÔÚÊ±,Ä¬ÈÏÇø×îĞÂ £¬ÓĞÈı¸öÑ¡Ïî ¡¾latest, earliest, none¡¿
+      # Kafkaä¸­æ²¡æœ‰åˆå§‹åç§»æˆ–å¦‚æœå½“å‰åç§»åœ¨æœåŠ¡å™¨ä¸Šä¸å†å­˜åœ¨æ—¶,é»˜è®¤åŒºæœ€æ–° ï¼Œæœ‰ä¸‰ä¸ªé€‰é¡¹ ã€latest, earliest, noneã€‘
       auto-offset-reset: latest
-      # ÊÇ·ñ¿ªÆô×Ô¶¯Ìá½»
+      # æ˜¯å¦å¼€å¯è‡ªåŠ¨æäº¤
       enable-auto-commit: true
-      # ×Ô¶¯Ìá½»µÄÊ±¼ä¼ä¸ô
+      # è‡ªåŠ¨æäº¤çš„æ—¶é—´é—´éš”
       auto-commit-interval: 100
-      # key,valueµÄ½âÂë·½Ê½
+      # æ‰¹é‡æ¶ˆè´¹ä¸€æ¬¡æœ€å¤§æ‹‰å–çš„æ•°æ®é‡
+      max-poll-records: 3100
+      #è¿æ¥è¶…æ—¶æ—¶é—´
+      session-timeout: 20000
+      #æ‰‹åŠ¨æäº¤è®¾ç½®ä¸pollçš„å¿ƒè·³æ•°,å¦‚æœæ¶ˆæ¯é˜Ÿåˆ—ä¸­æ²¡æœ‰æ¶ˆæ¯ï¼Œç­‰å¾…æ¯«ç§’åï¼Œè°ƒç”¨poll()æ–¹æ³•ã€‚å¦‚æœé˜Ÿåˆ—ä¸­æœ‰æ¶ˆæ¯ï¼Œç«‹å³æ¶ˆè´¹æ¶ˆæ¯ï¼Œæ¯æ¬¡æ¶ˆè´¹çš„æ¶ˆæ¯çš„å¤šå°‘å¯ä»¥é€šè¿‡max.poll.recordsé…ç½®ã€‚
+      max-poll-interval: 15000
+      #è®¾ç½®æ‹‰å–æ•°æ®çš„å¤§å°,15M
+      max-partition-fetch-bytes: 15728640
+      # key,valueçš„è§£ç æ–¹å¼
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
 
-    # Ö¸¶¨Ä¬ÈÏtopic id
+
+    # æŒ‡å®šé»˜è®¤topic id
     template:
       default-topic: test2
+
 logging:
   level:
     root: info
+
 
 
 

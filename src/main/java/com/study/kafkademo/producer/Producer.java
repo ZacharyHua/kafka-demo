@@ -33,12 +33,10 @@ public class Producer {
     public void sendMessage(Message message){
 
         log.info("kafka send message start");
-
         //内部组织消息
         message.setId("key"+System.currentTimeMillis());
         message.setMsg(UUID.randomUUID().toString());
         message.setSendTime(new Date());
-
         try{
             kafkaTemplate.send(kafkaTemplate.getDefaultTopic(),gson.toJson(message));
         }catch (Exception e){

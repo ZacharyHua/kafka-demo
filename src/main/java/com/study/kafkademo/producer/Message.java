@@ -1,5 +1,8 @@
 package com.study.kafkademo.producer;
 
+import lombok.Data;
+import lombok.experimental.Accessors;
+
 import java.util.Date;
 
 /**
@@ -7,6 +10,8 @@ import java.util.Date;
  * @author 小呆呆
  * @create 2019-07-01 23:51
  **/
+@Data
+@Accessors(chain = true)
 public class Message {
     private String id;
 
